@@ -113,7 +113,7 @@ const HomePage = ({ route, navigation }) => {
             style={styles.map} 
             region={currentPosition} // Set region to currentPosition
             showsUserLocation={true}>
-                {currentPosition ? (
+                {currentPosition.latitude != 0 ? (
                     <Marker
                     coordinate={{ latitude: currentPosition.latitude, longitude: currentPosition.longitude }}
                     title={"Marker Title"}
