@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "469005982497",
+    "project_id": "u-mate-c16d0",
+    "storage_bucket": "u-mate-c16d0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:469005982497:android:8aa3026bbe322ba6b07c60",
+        "android_client_info": {
+          "package_name": "com.umate"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDq42X4Ds3nmS_-lI7fQWalZWznMVW8sB4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
