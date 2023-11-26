@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 
-const SignUp2 = ({ route, navigation }) => {
+const UserAuth = ({ route, navigation }) => {
     const { firstName, midName, lastName } = route.params;
     const [email, setEmail] = useState('');
     const [userId, setUserId] = useState('');
@@ -96,7 +96,7 @@ const SignUp2 = ({ route, navigation }) => {
             return; // Stop further processing if passwords don't match
         }
     
-        navigation.navigate('SignUp3', {
+        navigation.navigate('UserAdress', {
             firstName: firstName,
             midName: midName,
             lastName: lastName,
@@ -229,4 +229,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default SignUp2;
+export default UserAuth;

@@ -3,17 +3,21 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Platform } from 'r
 import { Picker } from '@react-native-picker/picker';
 import DatePicker from '@react-native-community/datetimepicker';
 
-const SignUp3 = ({route, navigation}) => {
+const UserAdress = ({route, navigation}) => {
   const { firstName, midName, lastName, email, userId, password, role } = route.params;
   const [residence, setResidence] = useState('Residence');
   const [faculty, setFaculty] = useState('Faculty');
-  const [birthdate, setBirthdate] = useState(new Date(2000, 3, 6)); // Months are 0-indexed in JS Dates
-  const [gender, setGender] = useState('male');
+  const [birthdate, setBirthdate] = useState(new Date()); // Months are 0-indexed in JS Dates
+  const [gender, setGender] = useState(null);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [isAgeValid, setIsAgeValid] = useState(true);
+  const [isResidenceValid, setIsResidenceValid] = useState(false);
+  const [isFacultyValid, setIsFacultyValid] = useState(false);
+  
 
   const residences = ['Residence', 'Outsider', 'GuestHouse', 'Jasmine', 'Crystal', 'Edelweis', 'Annex', 'Boungeville', 'Genset',];
   const faculties = ['Falculties', 'ASMI', 'FILKOM',  'FKEP',  'FEB', 'Filsafat', 'Pertanian', 'M. Manajemen', 'M. Teologi', 'Profesi Ners'];
+  const isButtonEnabled = isAgeValid && isResidenceValid && isFacultyValid && gender !== null;
 
   const onChangeDate = (event, selectedDate) => {
     const currentDate = selectedDate || birthdate;
@@ -27,6 +31,8 @@ const SignUp3 = ({route, navigation}) => {
       setIsAgeValid(true);
     }
   };
+
+  
 
   const calculateAge = (birthdate) => {
     const today = new Date();
@@ -43,15 +49,17 @@ const SignUp3 = ({route, navigation}) => {
     const day = date.getDate();
     const month = date.toLocaleString('default', { month: 'long' });
     const year = date.getFullYear();
-  
     return `${month} ${day}, ${year}`; // Formats date as "Month day year"
   };
 
   const handleCreateAccount = () => {
-    if (!isAgeValid) {
-      return; 
+    if (!isButtonEnabled) {
+      // You can show an error message if needed
+      return;
     }
   };
+
+  
 
   return (
     <View style={styles.container}>
@@ -78,7 +86,10 @@ const SignUp3 = ({route, navigation}) => {
     <View style={styles.pickerContainer}>
       <Picker
         selectedValue={residence}
-        onValueChange={(itemValue, itemIndex) => setResidence(itemValue)}
+        onValueChange={(itemValue, itemIndex) => {
+          setResidence(itemValue);
+          setIsResidenceValid(itemValue !== 'Residence');
+        }}
         style={styles.picker}
       >
         {residences.map((option, index) => (
@@ -92,8 +103,10 @@ const SignUp3 = ({route, navigation}) => {
       <View style={styles.pickerContainer}>
         <Picker
           selectedValue={faculty}
-          onValueChange={(itemValue, itemIndex) => setFaculty(itemValue)}
-          style={styles.picker}
+          onValueChange={(itemValue, itemIndex) => {
+            setFaculty(itemValue);
+            setIsFacultyValid(itemValue !== 'Faculty');
+          }}
         >
           {faculties.map((option, index) => (
             <Picker.Item key={index} label={option} value={option} />
@@ -119,7 +132,10 @@ const SignUp3 = ({route, navigation}) => {
       )}
 
       {/* Create Account */}
-      <TouchableOpacity style={styles.Button} onPress={handleCreateAccount}>
+      <TouchableOpacity   style={[styles.Button, !isButtonEnabled && styles.disabledButton]}
+        onPress={handleCreateAccount}
+        disabled={!isButtonEnabled}
+      >
         <Text style={styles.ButtonText}>Create Account</Text>
       </TouchableOpacity>
     </View>
@@ -201,7 +217,7 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 15,
     justifyContent: 'center',
-    backgroundColor: '#fff', // Assuming your date picker background is white
+    backgroundColor: '#fff',
   },
   dateText: {
     fontSize: 16,
@@ -231,4 +247,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignUp3;
+export default UserAdress;

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 
-const SignUp = ({ navigation }) => {
+const UserName = ({ navigation }) => {
     const [firstName, setFirstName] = useState('');
     const [midName, setMidName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -18,7 +18,7 @@ const SignUp = ({ navigation }) => {
 
     const handleNext = () => {
         // Navigate to the next screen
-        navigation.navigate('SignUp2', {
+        navigation.navigate('UserAuth', {
             firstName: firstName,
             midName: midName,
             lastName: lastName,
@@ -121,4 +121,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default SignUp;
+export default UserName;

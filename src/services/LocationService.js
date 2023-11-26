@@ -15,14 +15,12 @@ export const requestLocationPermission = async () => {
       );
 
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        console.log('You can use the location');
         // Permission granted, you can use the location
       } else {
-        console.log('Location permission denied');
         // Permission denied
       }
     } catch (err) {
-      console.warn(err);
+      // Handle any errors here
     }
   }
 };
