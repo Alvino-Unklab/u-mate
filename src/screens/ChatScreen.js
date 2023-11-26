@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { View, Image, StyleSheet, Dimensions, TouchableOpacity, Text } from 'react-native';
-import { clickChatIcon, clickFriendIcon, clickMapIcon, friendIcon, mapIcon, chatIcon, MyLocationImage } from '../components/MenuIcons';
+import { clickChatIcon, friendIcon, mapIcon, } from '../assets/MenuIcons';
 
 const ChatScreen = ({ navigation }) => {
 

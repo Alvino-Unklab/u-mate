@@ -6,7 +6,7 @@ import { requestLocationPermission } from '../services/LocationService';
 import { getAuth } from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 
-import { clickChatIcon, clickFriendIcon, clickMapIcon, friendIcon, mapIcon, chatIcon, MyLocationImage } from '../components/MenuIcons';
+import { clickMapIcon, friendIcon, chatIcon, MyLocationImage } from '../assets/MenuIcons';
 
 const HomePage = ({ route, navigation }) => {
     const auth = getAuth();
