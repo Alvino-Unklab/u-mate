@@ -25,16 +25,8 @@ const LogIn = ({ navigation }) => {
         try {
             const auth = getAuth();
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
-            const userRef = firestore().collection('users').doc(userCredential.user.uid);
-            const doc = await userRef.get();
-
-            if (doc.exists && doc.data().isActive) {
-                setErrorMessage('User is already logged in on another device.');
-                setInputBorderColor('red');
-            } else {
-                await userRef.set({ isActive: false }, { merge: true });
-                navigation.navigate('HomePage', { userEmail: userCredential.user.email });
-            }
+            // Menghapus pengecekan dan pengaturan isActive
+            navigation.navigate('HomePage', { userEmail: userCredential.user.email });
         } catch (error) {
             let message;
             switch (error.code) {
@@ -109,7 +101,7 @@ const LogIn = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-    errorText:{
+    errorText: {
         fontSize: 10,
         color: 'red',
         textAlign: 'center',
@@ -119,7 +111,7 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        backgroundColor: '#f5f5f5', 
+        backgroundColor: '#f5f5f5',
         alignItems: 'center',
         justifyContent: 'center',
     },

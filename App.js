@@ -8,6 +8,7 @@ import UserName from './src/screens/SignUp/UserName';
 import UserAuth from './src/screens/SignUp/UserAuth';
 import UserAdress from './src/screens/SignUp/UserAdress';
 import ChatScreen from './src/screens/ChatScreen';
+import FriendListScreen from './src/screens/FriendListScreen';
 
 const Stack = createStackNavigator();
 
@@ -35,6 +36,7 @@ function App() {
         <Stack.Screen name="UserAuth" component={UserAuth} />
         <Stack.Screen name="UserAdress" component={UserAdress} />
         <Stack.Screen name="ChatScreen" component={ChatScreen} />
+        <Stack.Screen name="FriendListScreen" component={FriendListScreen} />
         {/* Other screens can also be added here as needed */}
       </Stack.Navigator>
     </NavigationContainer>

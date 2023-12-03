@@ -1,22 +1,52 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { View, Image, StyleSheet, Dimensions, TouchableOpacity, Text } from 'react-native';
-import { clickChatIcon, friendIcon, mapIcon, } from '../assets/MenuIcons';
+import React, { useEffect, useState } from 'react';
+import { View, Image, StyleSheet, TouchableOpacity, Text, FlatList } from 'react-native';
+import { clickChatIcon, friendIcon, mapIcon } from '../assets/MenuIcons';
+import firestore from '@react-native-firebase/firestore';
+import { getAuth } from '@react-native-firebase/auth';
 
 const ChatScreen = ({ navigation }) => {
+    const [chatList, setChatList] = useState([]);
+    const auth = getAuth();
+    const currentUser = auth.currentUser;
+
+    useEffect(() => {
+        const fetchFriends = async () => {
+            const friendListSnapshot = await firestore()
+                .collection('friends')
+                .doc(currentUser.uid)
+                .get();
+
+            const friendIds = friendListSnapshot.data()?.friendsList || [];
+            
+            // Add logic to fetch chat data based on friendIds
+            // This might involve fetching the latest message from each friend or chat room details
+        };
+
+        fetchFriends();
+    }, []);
 
     return (
         <View style={styles.container}>
-
+            <FlatList
+                data={chatList}
+                keyExtractor={(item) => item.id}
+                renderItem={({ item }) => (
+                    <TouchableOpacity onPress={() => {/* Navigate to individual chat screen */}}>
+                        <Text>{item.chatName}</Text>
+                        {/* Display other chat info */}
+                    </TouchableOpacity>
+                )}
+            />
 
             <View style={styles.bottomBar}>
                 <TouchableOpacity onPress={() => navigation.navigate('HomePage')} style={styles.iconButtonMap}>
-                <Image source={mapIcon} style={styles.menuIcon} />
+                    <Image source={mapIcon} style={styles.menuIcon} />
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.iconButtonChat}>
-                <Image source={clickChatIcon} style={styles.menuIcon} />
+                    <Image source={clickChatIcon} style={styles.menuIcon} />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.iconButton}>
-                <Image source={friendIcon} style={styles.menuIcon} />
+                <TouchableOpacity onPress={() => navigation.navigate('FriendListScreen')} style={styles.iconButtonFriend}>
+                    <Image source={friendIcon} style={styles.menuIcon} />
                 </TouchableOpacity>
             </View>
         </View>

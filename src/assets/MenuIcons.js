@@ -5,5 +5,6 @@ import clickChatIcon from './menuIcons/clickChatIcon.png';
 import clickFriendIcon from './menuIcons/clickFriendIcon.png';
 import clickMapIcon from './menuIcons/clickMapIcon.png';
 import MyLocationImage from './icons/MyLocation.png';
+import defaultAvatar from './icons/defaultAvatar.png';
 
-export { chatIcon, mapIcon, friendIcon, clickChatIcon, clickMapIcon, clickFriendIcon, MyLocationImage };
+export { defaultAvatar, chatIcon, mapIcon, friendIcon, clickChatIcon, clickMapIcon, clickFriendIcon, MyLocationImage };

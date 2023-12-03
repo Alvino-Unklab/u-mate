@@ -152,7 +152,7 @@ const HomePage = ({ route, navigation }) => {
                 <TouchableOpacity onPress={() => navigation.navigate('ChatScreen')} style={styles.iconButtonChat}>
                 <Image source={chatIcon} style={styles.menuIcon} />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.iconButton}>
+                <TouchableOpacity onPress={() => navigation.navigate('FriendListScreen')} style={styles.iconButton}>
                 <Image source={friendIcon} style={styles.menuIcon} />
                 </TouchableOpacity>
             </View>

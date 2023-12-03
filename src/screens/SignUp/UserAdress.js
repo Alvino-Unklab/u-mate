@@ -1,27 +1,28 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Platform } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Platform } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import DatePicker from '@react-native-community/datetimepicker';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
 const UserAdress = ({route, navigation}) => {
-  const { firstName, midName, lastName, email, userId, password, role } = route.params;
+  const { firstName, midName, lastName, email, password, role } = route.params;
   const [residence, setResidence] = useState('Residence');
   const [faculty, setFaculty] = useState('Faculty');
-  const [birthdate, setBirthdate] = useState(new Date()); // Months are 0-indexed in JS Dates
+  const [birthdate, setBirthdate] = useState(new Date()); 
   const [gender, setGender] = useState(null);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [isAgeValid, setIsAgeValid] = useState(true);
   const [isResidenceValid, setIsResidenceValid] = useState(false);
   const [isFacultyValid, setIsFacultyValid] = useState(false);
-  
 
   const residences = ['Residence', 'Outsider', 'GuestHouse', 'Jasmine', 'Crystal', 'Edelweis', 'Annex', 'Boungeville', 'Genset',];
-  const faculties = ['Falculties', 'ASMI', 'FILKOM',  'FKEP',  'FEB', 'Filsafat', 'Pertanian', 'M. Manajemen', 'M. Teologi', 'Profesi Ners'];
+  const faculties = ['Faculties', 'ASMI', 'FILKOM', 'FKEP', 'FEB', 'Filsafat', 'Pertanian', 'M. Manajemen', 'M. Teologi', 'Profesi Ners'];
   const isButtonEnabled = isAgeValid && isResidenceValid && isFacultyValid && gender !== null;
 
   const onChangeDate = (event, selectedDate) => {
     const currentDate = selectedDate || birthdate;
-    setShowDatePicker(Platform.OS === 'ios'); // If iOS, keep the picker open
+    setShowDatePicker(Platform.OS === 'ios'); 
     setBirthdate(currentDate);
 
     const age = calculateAge(currentDate);
@@ -31,8 +32,6 @@ const UserAdress = ({route, navigation}) => {
       setIsAgeValid(true);
     }
   };
-
-  
 
   const calculateAge = (birthdate) => {
     const today = new Date();
@@ -44,29 +43,51 @@ const UserAdress = ({route, navigation}) => {
     }
     return age;
   };
-   
+
   const formatDate = (date) => {
     const day = date.getDate();
     const month = date.toLocaleString('default', { month: 'long' });
     const year = date.getFullYear();
-    return `${month} ${day}, ${year}`; // Formats date as "Month day year"
+    return `${month} ${day}, ${year}`;
   };
 
-  const handleCreateAccount = () => {
+  const handleCreateAccount = async () => {
     if (!isButtonEnabled) {
       // You can show an error message if needed
       return;
     }
-  };
 
-  
+    try {
+      const userCredential = await auth().createUserWithEmailAndPassword(email, password);
+      const userData = {
+        firstName,
+        midName,
+        lastName,
+        email,
+        userId: userCredential.user.uid,
+        password,
+        role,
+        age: calculateAge(birthdate),
+        birthdate: birthdate.toISOString(),
+        residence,
+        faculty,
+        gender
+      };
+      
+      await firestore().collection('users').doc(userCredential.user.uid).set(userData);
+      console.log('User account created and data stored in Firestore');
+      userCredential.user.sendEmailVerification();
+      navigation.navigate('LogIn'); // Replace 'NextScreen' with the actual next screen name
+    } catch (error) {
+      console.error('Error creating account:', error);
+    }
+  };
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{firstName} {lastName} </Text>
       <Text style={styles.text}>Please, choose correctly!</Text>
 
-      
       {/* Birthdate Picker */} 
       <Text>Birthdate (You are {calculateAge(birthdate)} years old now)</Text>
       <TouchableOpacity onPress={() => setShowDatePicker(true)} style={styles.datePicker}>
@@ -81,22 +102,22 @@ const UserAdress = ({route, navigation}) => {
         />
       )}      
 
-    {/* Residence Picker */}
-    <Text style={styles.text2}>Residence</Text>
-    <View style={styles.pickerContainer}>
-      <Picker
-        selectedValue={residence}
-        onValueChange={(itemValue, itemIndex) => {
-          setResidence(itemValue);
-          setIsResidenceValid(itemValue !== 'Residence');
-        }}
-        style={styles.picker}
-      >
-        {residences.map((option, index) => (
-          <Picker.Item key={index} label={option} value={option} />
-        ))}
-      </Picker>
-    </View>
+      {/* Residence Picker */}
+      <Text style={styles.text2}>Residence</Text>
+      <View style={styles.pickerContainer}>
+        <Picker
+          selectedValue={residence}
+          onValueChange={(itemValue, itemIndex) => {
+            setResidence(itemValue);
+            setIsResidenceValid(itemValue !== 'Residence');
+          }}
+          style={styles.picker}
+        >
+          {residences.map((option, index) => (
+            <Picker.Item key={index} label={option} value={option} />
+          ))}
+        </Picker>
+      </View>
 
       {/* Faculty Picker */}
       <Text style={styles.text2}>Faculty of</Text>
@@ -107,6 +128,7 @@ const UserAdress = ({route, navigation}) => {
             setFaculty(itemValue);
             setIsFacultyValid(itemValue !== 'Faculty');
           }}
+          style={styles.picker}
         >
           {faculties.map((option, index) => (
             <Picker.Item key={index} label={option} value={option} />
@@ -132,7 +154,7 @@ const UserAdress = ({route, navigation}) => {
       )}
 
       {/* Create Account */}
-      <TouchableOpacity   style={[styles.Button, !isButtonEnabled && styles.disabledButton]}
+      <TouchableOpacity style={[styles.Button, !isButtonEnabled && styles.disabledButton]}
         onPress={handleCreateAccount}
         disabled={!isButtonEnabled}
       >
@@ -145,8 +167,7 @@ const UserAdress = ({route, navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5', // This matches the background color of SignUp1 and SignUp2
-    
+    backgroundColor: '#f5f5f5',
     justifyContent: 'center',
     padding: 20,
   },
@@ -161,48 +182,38 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontStyle: 'italic',
     marginBottom: 20,
-    alignItems: 'center',
     textAlign: 'center',
   },
-  text2:{
+  text2: {
     textAlign: 'left',
   },
   pickerContainer: {
     borderWidth: 1,
-    borderColor: '#554ccd', 
+    borderColor: '#554ccd',
     borderRadius: 5,
     marginBottom: 15,
     width: '100%',
-    genderContainer: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      marginBottom: 15,
-
-    },
   },
   genderContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 15,
-    // ... other styles you need
   },
   genderButton: {
     flexDirection: 'row',
     alignItems: 'center',
     marginRight: 15,
     borderRadius: 5,
-    // ... other styles you need
   },
   genderText: {
     marginRight: 5,
-    // ... other styles you need
   },
   radioButton: {
     height: 20,
     width: 20,
     borderRadius: 10,
-    borderWidth: 2, // Added border width
-    borderColor: '#554ccd', // Added border color
+    borderWidth: 2,
+    borderColor: '#554ccd',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -216,7 +227,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     marginBottom: 15,
-    justifyContent: 'center',
     backgroundColor: '#fff',
   },
   dateText: {
@@ -227,13 +237,13 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   Button: {
-    backgroundColor: '#554ccd', // Button color to match the other screens
+    backgroundColor: '#554ccd',
     padding: 15,
     alignItems: 'center',
     borderRadius: 5,
     marginBottom: 10,
-    alignSelf: 'center', // Center the button horizontally
-    width: '80%', // Adjust the width as needed
+    alignSelf: 'center',
+    width: '80%',
   },
   ButtonText: {
     color: '#ffffff',
