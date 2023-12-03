@@ -18,17 +18,17 @@ function App() {
   useEffect(() => {
       const auth = getAuth();
       const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-          setUser(currentUser); // currentUser will be null if no user is signed in
+          setUser(currentUser); 
       });
 
-      // Cleanup subscription on unmount
-      return unsubscribe; // This is equivalent to return () => unsubscribe();
+    
+      return unsubscribe; 
   }, []);
 
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{
-        animationEnabled: false, // Disable animations for all screens in the stack
+        animationEnabled: false, 
         }} initialRouteName="LogIn">
         <Stack.Screen name="LogIn" component={LogIn} />
         <Stack.Screen name="HomePage" component={HomePage} />
