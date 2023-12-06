@@ -9,6 +9,8 @@ import UserAuth from './src/screens/SignUp/UserAuth';
 import UserAdress from './src/screens/SignUp/UserAdress';
 import ChatScreen from './src/screens/ChatScreen';
 import FriendListScreen from './src/screens/FriendListScreen';
+import Profile from './src/screens/Profile';
+import OtherProfile from './src/screens/OthersProfile';
 
 const Stack = createStackNavigator();
 
@@ -29,7 +31,7 @@ function App() {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{
         animationEnabled: false, 
-        }} initialRouteName="LogIn">
+        }} initialRouteName="UserName">
         <Stack.Screen name="LogIn" component={LogIn} />
         <Stack.Screen name="HomePage" component={HomePage} />
         <Stack.Screen name="UserName" component={UserName} />
@@ -37,6 +39,8 @@ function App() {
         <Stack.Screen name="UserAdress" component={UserAdress} />
         <Stack.Screen name="ChatScreen" component={ChatScreen} />
         <Stack.Screen name="FriendListScreen" component={FriendListScreen} />
+        <Stack.Screen name="Profile" component={Profile} />
+        <Stack.Screen name="OtherProfile" component={OtherProfile} />
         {/* Other screens can also be added here as needed */}
       </Stack.Navigator>
     </NavigationContainer>

@@ -146,13 +146,16 @@ const HomePage = ({ route, navigation }) => {
             </TouchableOpacity>
 
             <View style={styles.bottomBar}>
-                <TouchableOpacity style={styles.iconButtonMap}>
+                <TouchableOpacity style={[styles.iconButtonMap, {backgroundColor: '#ffffff'}]}>
                 <Image source={clickMapIcon} style={styles.menuIcon} />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => navigation.navigate('ChatScreen')} style={styles.iconButtonChat}>
+                <TouchableOpacity onPress={() => navigation.navigate('ChatScreen')} style={styles.iconButtonMap}>
                 <Image source={chatIcon} style={styles.menuIcon} />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => navigation.navigate('FriendListScreen')} style={styles.iconButton}>
+                <TouchableOpacity onPress={() => navigation.navigate('FriendListScreen')} style={styles.iconButtonMap}>
+                <Image source={friendIcon} style={styles.menuIcon} />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate('FriendListScreen')} style={styles.iconButtonMap}>
                 <Image source={friendIcon} style={styles.menuIcon} />
                 </TouchableOpacity>
             </View>
@@ -190,7 +193,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-around',
         backgroundColor: '#554CCD',
-        marginHorizontal: 85,
+        marginHorizontal: 50,
         marginBottom: -1,
         borderRadius: 20,
         paddingVertical: 10,
@@ -200,20 +203,14 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         elevation: 5,
+        width: 300
     },
     menuIcon:{
         width: 40,
         height: 40,
     },
-    iconButtonChat: {
-        marginRight: 50,
-    },
     iconButtonMap: {
-        marginRight: 50,
-        backgroundColor: '#cccccc',
         borderRadius: 10,
-    },
-    iconButtonFriend: {
     },
     notificationBubble: {
         // Style for the notification bubble
